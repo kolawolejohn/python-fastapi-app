@@ -1,18 +1,16 @@
 from fastapi import Depends, status, HTTPException
 from datetime import datetime, timedelta
-
-
 from sqlalchemy.orm.session import Session
 from . import schemas, database, models
 from jose import JWTError, jwt
 from fastapi.security import OAuth2PasswordBearer
-from decouple import config
+from . config import settings
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
 
-API_SECRET_KEY = config("SECRET_KEY")
-API_ALGORITHM = config("ALGORITHM")
-API_ACCESS_TOKEN_EXPIRE_MINUTES = config("ACCESS_TOKEN_EXPIRE_MINUTES")
+API_SECRET_KEY = settings.SECRET_KEY
+API_ALGORITHM = settings.ALGORITHM
+API_ACCESS_TOKEN_EXPIRE_MINUTES = settings.ACCESS_TOKEN_EXPIRE_MINUTES
 
 def create_access_token(data: dict):
    to_encode = data.copy()
