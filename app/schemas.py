@@ -2,6 +2,8 @@ from typing import Optional
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
+from pydantic.types import conint
+
 
 class PostBase(BaseModel):
    title: str
@@ -28,6 +30,14 @@ class Post(PostBase):
    class Config:
       orm_mode = True
 
+##Not sure if he noticed it or not, but @ 10:26:02 - I think what fixed the issue was making the PostVote class extend BaseModel instead of Post. (ie: PostVote(BaseModel))
+class PostVote(BaseModel):
+   Post: Post
+   votes: int
+
+   class Config:
+      orm_mode = True
+
 class UserCreate(BaseModel): ##request Model
    email: EmailStr
    password: str
@@ -48,3 +58,8 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
    id: Optional[str] = None
+
+
+class Vote(BaseModel):
+   post_id: int
+   dir: conint(le=1)
